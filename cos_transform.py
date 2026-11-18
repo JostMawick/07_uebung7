@@ -39,8 +39,8 @@ for row in range(N):
             Cx[row, u] += W[u, x] * I[x]
 
 
-print(img.round(1))
-print(Cx.round(1))
+#print(img.round(1))
+#print(Cx.round(1))
 
 #1.3
 Cxy = np.zeros((N, N))
@@ -64,7 +64,7 @@ for col in range(N):
         for v in range(N):
             Cx2[y, col] += W_inv[y, v] * I[v]
 
-print(Cx2.round(1))
+#print(Cx2.round(1))
 
 #1.5
 img2 = np.zeros((N, N))
@@ -75,7 +75,25 @@ for row in range(N):
         for u in range(N):
             img2[row, x] += W_inv[x, u] * I[u]
 
-print(img2.round(1))
+#print(img2.round(1))
+
+# base quantization matrix (JPEG standard ITU-T T.81)
+Qbase = np.array([[16, 11, 10, 16,  24,  40,  51, 61],
+               [12, 12, 14, 19,  26,  58,  60, 55],
+               [14, 13, 16, 24,  40,  57,  69, 56],
+               [14, 17, 22, 29,  51,  87,  80, 62],
+               [18, 22, 37, 56,  68, 109, 103, 77],
+               [24, 35, 55, 64,  81, 104, 113, 92],
+               [49, 64, 78, 87, 103, 121, 120, 101],
+               [72, 92, 95, 98, 112, 100, 103, 99]])
+
+c = 10 # compression quality factor
+Q = Qbase*c
+Cxy_red = np.round(Cxy / Q).astype(np.int32)
+
+print(Cxy_red)
+# nach dem print ist der werte Bereich zwischen -2 und 61. daher brauchen wir nur int8
+# C = 32 / 8 = 4 => R=75%
 
 fig, axes = plt.subplots(2, 3, figsize=(15, 9))
 
