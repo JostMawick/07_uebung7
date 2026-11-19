@@ -97,7 +97,7 @@ print(Cxy_red)
 # C = 32 / 8 = 4 => R=75%
 
 #1.7
-Cxy_rec = Cxy_red * Q                  # Quantisierung rückgängig (Rundungsfehler bleibt)
+Cxy_rec = Cxy_red * Q                  
 
 #y zuerst
 Cx_rec = np.zeros((N, N))
